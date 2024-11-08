@@ -10,9 +10,8 @@ def get_connection():
             host = 'localhost',
             port=5432
         )
-        if conn:
-            print(f"connection established successfully at port")
-        else:
-            print('error connecting to database')
+        return conn
+
     except Exception as ex:
         print(f"error {ex}")
+        raise

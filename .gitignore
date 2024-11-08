@@ -1,40 +1,31 @@
-# Python bytecode
-*.pyc
-*.pyo
-__pycache__/
-
 # Virtual environments
 wsl_env/
 venv/
-env/
-.venv/
+.env/
 
-# Dependency directories
-Pipfile.lock
-poetry.lock
+# Python bytecode
+__pycache__/
+*.pyc
+*.pyo
 
-# IDE and editor specific files
+# IDE/Editor files
 .vscode/
 .idea/
 *.swp
+*.swo
 
-# Operating system-specific files
+# Log files
+*.log
+
+# OS-specific files
 .DS_Store
 Thumbs.db
 
-# Logs and temporary files
-*.log
-*.tmp
-*.bak
-*.swp
-
-# Environment variables or configuration files with sensitive data
+# Configuration files
 .env
-*.env
 config.json
+secret_keys/
 
-# Pytest cache
-.cache/
-
-# Jupyter Notebook checkpoints
-.ipynb_checkpoints/
+# Test reports
+*.xml
+*.html

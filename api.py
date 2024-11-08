@@ -25,6 +25,5 @@ def get_articles():
 articles = get_articles()
 if articles: 
     print('reached checkpoint 3')
-    print(articles)
 else: 
     print('error invoking func')
