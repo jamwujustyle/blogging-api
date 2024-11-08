@@ -1,0 +1,40 @@
+# Python bytecode
+*.pyc
+*.pyo
+__pycache__/
+
+# Virtual environments
+wsl_env/
+venv/
+env/
+.venv/
+
+# Dependency directories
+Pipfile.lock
+poetry.lock
+
+# IDE and editor specific files
+.vscode/
+.idea/
+*.swp
+
+# Operating system-specific files
+.DS_Store
+Thumbs.db
+
+# Logs and temporary files
+*.log
+*.tmp
+*.bak
+*.swp
+
+# Environment variables or configuration files with sensitive data
+.env
+*.env
+config.json
+
+# Pytest cache
+.cache/
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
