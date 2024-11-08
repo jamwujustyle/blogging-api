@@ -1,6 +1,5 @@
 import requests 
 import psycopg2
-print(requests)
 
 def get_connection():
     try:
