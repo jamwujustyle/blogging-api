@@ -1,40 +1,51 @@
 from api import get_articles
-from db import get_connection 
+from db import get_connection, release_connection
+import logging
 
-articles = get_articles()
+
+
 table_name = 'articles'
 
-def desctructure_article(article): 
-    print('reached checkpoint 4 ')
+def destructure_article(article): 
     name = article.get('source', {}).get('name', 'no name available')
     author = article.get('author', 'no author available')
     title = article.get('title', 'no titlte available')
     description = article.get('description', 'no description available')
     content = article.get('content', 'no content available')
     published_at = article.get('publishedAt', 'no publishedAt available')
-    return name, author, title, description, content, published_at
+    return (name, author, title, description, content, published_at)
 
 
-def insert_into_table(name, author, title, description, content, published_at, table_name): 
+def batch_insert_articles(articles_batch): 
     query = """
         INSERT INTO articles (uuid, name, author, title, description, content, published_at)
         VALUES (gen_random_uuid(), %s, %s, %s, %s, %s, %s)
+        ON CONFLICT (uuid) DO NOTHING
             """ 
+    conn = None
     try:
-      print('reached checkpoint 5')
       conn = get_connection()
       cursor = conn.cursor()
-      cursor.execute(query, (name, author, title, description, content, published_at))
+      cursor.executemany(query, articles_batch)
       conn.commit()
-      print(f"inserted into table {table_name}")
+      logging.info(f'inserted batch of {len(articles_batch)} into table {table_name}')
       cursor.close()
-      conn.close()
     except Exception as ex:
-        print(f"error inserting into table {table_name}: {ex}")
+        logging.error(f'error in batch insert: {ex}')
+    finally:
+        if conn:
+            release_connection(conn)
 
-def iterate_over_articles():
-    print('reached checkpoint 6')
+def iterate_over_articles(batch_size=10):
+    articles_batch = []
+    articles = get_articles()
+    logging.info(f"Retrieved {len(articles)} articles")
+
     for article in articles:
-        name, author, title, description, content, published_at = desctructure_article(article)
-        insert_into_table(name, author, title, description, content, published_at, table_name)
+        articles_batch.append(destructure_article(article))
+        if(len(articles_batch) == batch_size):
+            batch_insert_articles(articles_batch)
+            articles_batch = []
 
+    if articles_batch:
+        batch_insert_articles(articles_batch)
